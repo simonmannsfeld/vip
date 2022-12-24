@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="dist/css/vip.css">
+</head>
+<body>
+
+    <input class="vip" type="text" value="fa fa-wheelchair">
+    <hr>
+    <input class="vip" type="text" value="fa fa-wheelchair">
+    <hr>
+    <p class="vip"></p>
+    <hr>
+    <select class="vip">
+        <option value="fa fa-user">Mensch</option>
+        <option value="fa fa-cog">Einstellungen</option>
+        <option value="fa fa-file">Datei</option>
+    </select>
+
+    <script src="dist/js/vip.js"></script>
+    <script>
+        let iconPickers = new Vip('.vip', {
+            labels: 'Happy Picker'
+        });
+    </script>
+</body>
+</html>
