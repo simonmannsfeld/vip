@@ -16,6 +16,10 @@
     margin: 10vh auto;
     max-height: 80vh;
     border-radius: 2px;
+    border: 1px solid #ccc;
+}
+.vip-backdrop .vip-modal {
+    border: none;
 }
 .vip-modal-header {
     background-color: #0051c9;
@@ -139,4 +143,18 @@
 .vip-select-button:active {
     background-color: #f0f0f0;
     box-shadow: inset 1px 1px 4px 1px rgb(0 0 0 / 8%);
+}
+.vip-container input, .vip-container select {
+    border-width: 0 1px 0 0;
+    border-color: #ccc;
+    padding: 10px;
+    background: none;
+}
+.vip-container select {
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    appearance:none;
+}
+.vip-container input:focus, .vip-container select:focus {
+    outline: none;
 }

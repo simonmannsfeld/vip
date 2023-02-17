@@ -12,8 +12,6 @@
     <hr>
     <input class="vip" type="text" value="fa fa-wheelchair">
     <hr>
-    <p class="vip"></p>
-    <hr>
     <select class="vip">
         <option value="fa fa-user">Mensch</option>
         <option value="fa fa-cog">Einstellungen</option>
@@ -23,7 +21,27 @@
     <script src="dist/js/vip.js"></script>
     <script>
         let iconPickers = new Vip('.vip', {
-            labels: 'Happy Picker'
+            texts: {
+                searchPlaceholder: 'Suche...',
+                modalHeadline: 'Wähle ein Icon aus',
+                noResultsText: 'Es wurden keine Icons gefunden. Bitte ändere den Filter.',
+            },
+            clickEvents: {
+                previewContainer: true,
+                input: true,
+                btn: true,
+            },
+            ui: {
+                previewContainer: true,
+                input: false,
+                btn: false,
+                backdrop: true,
+            },
+            ux: {
+                makeInputReadonly: false,
+                autoClose: true,
+            },
+            url: '/vip/dist/json/icons.json',
         });
     </script>
 </body>
