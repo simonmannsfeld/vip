@@ -9,6 +9,7 @@
     width: 100vw;
     height: 100vh;
     transition: background-color ease-in-out .3s;
+    z-index: 10000;
 }
 .vip-modal {
     width: 80vw;
