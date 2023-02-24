@@ -14,108 +14,109 @@
     } else {
         root.VIconPicker = factory(root);
     }
-})(typeof global !== "undefined" ? global : this.window || this.global, function (root) {
+})(typeof global !== "undefined" ? global : self.window || self.global, function (root) {
 
     'use strict';
 
     let VIconPicker = function(vip, domElement, options, library) {
         let vIconPicker = {};
+        let self = this;
 
-        vIconPicker.vip = vip;
-        vIconPicker.domElement = domElement;
-        vIconPicker.options = options;
-        vIconPicker.library = library;
+        self.vip = vip;
+        self.domElement = domElement;
+        self.options = options;
+        self.library = library;
 
-        vIconPicker.init = function() {
-            if(!vIconPicker.options.ui.input) {
-                vIconPicker.domElement.style = 'display: none;'
+        self.init = function() {
+            if(!self.options.ui.input) {
+                self.domElement.style = 'display: none;'
             }
-            vIconPicker.domElement.insertAdjacentHTML('afterend', vIconPicker.renderIconPickerMarkup());
-            if(vIconPicker.options.ui.previewContainer) {
-                vIconPicker.domElement.nextSibling.querySelector('.vip-preview-container').after(vIconPicker.domElement);
-            } else if(vIconPicker.options.ui.btn) {
-                vIconPicker.domElement.nextSibling.querySelector('.vip-select-button').before(vIconPicker.domElement);
+            self.domElement.insertAdjacentHTML('afterend', self.renderIconPickerMarkup());
+            if(self.options.ui.previewContainer) {
+                self.domElement.nextSibling.querySelector('.vip-preview-container').after(self.domElement);
+            } else if(self.options.ui.btn) {
+                self.domElement.nextSibling.querySelector('.vip-select-button').before(self.domElement);
             } else {
-                vIconPicker.domElement.nextSibling.appendChild(vIconPicker.domElement);
+                self.domElement.nextSibling.appendChild(self.domElement);
             }
 
-            if(vIconPicker.options.ux.makeInputReadonly) {
-                vIconPicker.domElement.readOnly = true;
+            if(self.options.ux.makeInputReadonly) {
+                self.domElement.readOnly = true;
             }
-            vIconPicker.domElement.spellcheck = false;
-            vIconPicker.picker = vIconPicker.domElement.parentNode;
-            vIconPicker.initIconPickerClickEvents();
+            self.domElement.spellcheck = false;
+            self.picker = self.domElement.parentNode;
+            self.initIconPickerClickEvents();
         };
 
-        vIconPicker.renderIconPickerMarkup = function() {
+        self.renderIconPickerMarkup = function() {
             let btnMarkup = '';
             let previewContainerMarkup = '';
 
-            if(vIconPicker.options.ui.btn) {
-                btnMarkup = '<div class="vip-button-container"><button class="vip-select-button">' + vIconPicker.options.texts.btnLabel + '</button></div>';
+            if(self.options.ui.btn) {
+                btnMarkup = '<div class="vip-button-container"><button class="vip-select-button">' + self.options.texts.btnLabel + '</button></div>';
             }
 
-            if(vIconPicker.options.ui.previewContainer) {
-                previewContainerMarkup = '<div class="vip-preview-container"><i class="' + vIconPicker.domElement.value + '"></i></div>';
+            if(self.options.ui.previewContainer) {
+                previewContainerMarkup = '<div class="vip-preview-container"><i class="' + self.domElement.value + '"></i></div>';
             }
 
             return '<div class="vip-container">' + previewContainerMarkup + btnMarkup + '</div>';
         };
 
-        vIconPicker.renderModal = function(event) {
-            if(!vIconPicker.isOpen()) {
+        self.renderModal = function(event) {
+            if(!self.isOpen()) {
                 event.stopPropagation();
-                vIconPicker.options.on.beforeOpenModal(this);
-                vIconPicker.open(this);
-                vIconPicker.options.on.afterOpenModal(this);
+                self.options.on.beforeOpenModal(this);
+                self.open(this);
+                self.options.on.afterOpenModal(this);
             }
         };
 
-        vIconPicker.initIconPickerClickEvents = function() {
+        self.initIconPickerClickEvents = function() {
 
-            if(vIconPicker.options.clickEvents.btn && vIconPicker.options.ui.btn) {
-                vIconPicker.picker.querySelector('.vip-select-button').addEventListener('click', function(e) {
-                    vIconPicker.renderModal(e);
+            if(self.options.clickEvents.btn && self.options.ui.btn) {
+                self.picker.querySelector('.vip-select-button').addEventListener('click', function(e) {
+                    self.renderModal(e);
                 });
             }
 
-            if(vIconPicker.options.clickEvents.input && vIconPicker.options.ui.input) {
-                if(vIconPicker.domElement.nodeName === 'SELECT') {
-                    vIconPicker.domElement.addEventListener('mousedown', function(e) {
+            if(self.options.clickEvents.input && self.options.ui.input) {
+                if(self.domElement.nodeName === 'SELECT') {
+                    self.domElement.addEventListener('mousedown', function(e) {
                         e.preventDefault();
                     });
                 }
 
-                vIconPicker.domElement.addEventListener('click', function(e) {
-                    if(!vIconPicker.isOpen()) {
-                        vIconPicker.renderModal(e);
+                self.domElement.addEventListener('click', function(e) {
+                    if(!self.isOpen()) {
+                        self.renderModal(e);
                     }
                 });
             }
 
-            if(vIconPicker.options.clickEvents.previewContainer && vIconPicker.options.ui.previewContainer) {
-                vIconPicker.picker.querySelector('.vip-preview-container').addEventListener('click', function(e) {
-                    vIconPicker.renderModal(e);
+            if(self.options.clickEvents.previewContainer && self.options.ui.previewContainer) {
+                self.picker.querySelector('.vip-preview-container').addEventListener('click', function(e) {
+                    self.renderModal(e);
                 });
             }
         };
 
-        vIconPicker.initModalEvents = function() {
-            vIconPicker.initModalCloseButtonClick();
-            vIconPicker.initSearchEvent();
-            vIconPicker.initSelectEvent();
+        self.initModalEvents = function() {
+            self.initModalCloseButtonClick();
+            self.initSearchEvent();
+            self.initSelectEvent();
         };
 
-        vIconPicker.initSelectEvent = function() {
+        self.initSelectEvent = function() {
             document.querySelector('.vip-icon-library').addEventListener('click', function(e) {
                 e.stopPropagation();
                 if(e.target.tagName.toUpperCase() === 'I') {
-                    if(vIconPicker.options.ui.previewContainer) {
-                        vIconPicker.picker.querySelector('.vip-preview-container i').className = e.target.className;
+                    if(self.options.ui.previewContainer) {
+                        self.picker.querySelector('.vip-preview-container i').className = e.target.className;
                     }
-                    vIconPicker.domElement.value = e.target.className;
-                    vIconPicker.options.on.iconSelected(e.target.className);
-                    vIconPicker.close();
+                    self.domElement.value = e.target.className;
+                    self.options.on.iconSelected(e.target.className);
+                    self.close();
                 }
             });
 
@@ -124,27 +125,27 @@
             });
         };
 
-        vIconPicker.initModalCloseButtonClick = function() {
+        self.initModalCloseButtonClick = function() {
             document.querySelector('.vip-close-modal').addEventListener('click', function() {
-                vIconPicker.close();
+                self.close();
             });
 
-            if(vIconPicker.options.ux.autoClose) {
-                if(vIconPicker.options.ui.backdrop) {
+            if(self.options.ux.autoClose) {
+                if(self.options.ui.backdrop) {
                     document.querySelector('.vip-backdrop').addEventListener('click', function() {
-                        vIconPicker.close();
+                        self.close();
                     });
                 } else {
                     document.addEventListener('click', function(e) {
-                        if(vIconPicker.isOpen() && !e.target.classList.contains('vip-model') && e.target.closest('.vip-modal') === null) {
-                            vIconPicker.close();
+                        if(self.isOpen() && !e.target.classList.contains('vip-model') && e.target.closest('.vip-modal') === null) {
+                            self.close();
                         }
                     });
                 }
             }
         };
 
-        vIconPicker.initSearchEvent = function() {
+        self.initSearchEvent = function() {
             document.querySelector('.vip-search-container input').addEventListener('keyup', function(ev) {
                 let noMatch = true;
                 if(ev.target.value.length > 2) {
@@ -173,40 +174,40 @@
             });
         };
 
-        vIconPicker.renderModalHtml = function() {
+        self.renderModalHtml = function() {
             let icons = '';
-            for (const [key, value] of Object.entries(vIconPicker.library)) {
+            for (const [key, value] of Object.entries(self.library)) {
                 icons += '<i class="' + key + '" data-vip-search="' + value + '"></i>'
             }
-            let html = '<div class="vip-modal"><div class="vip-modal-header"><div class="vip-headline">' + vIconPicker.options.texts.modalHeadline + '</div><button class="vip-close-modal"></button></div><div class="vip-modal-body"><div class="vip-search-container"><input type="search" placeholder="' + vIconPicker.options.texts.searchPlaceholder + '"></div><div class="vip-icon-container"><div class="vip-no-results" style="display: none;">' + vIconPicker.options.texts.noResultsText + '</div><div class="vip-icon-library">' + icons + '</div></div></div></div>';
-            if(vIconPicker.options.ui.backdrop) {
+            let html = '<div class="vip-modal"><div class="vip-modal-header"><div class="vip-headline">' + self.options.texts.modalHeadline + '</div><button class="vip-close-modal"></button></div><div class="vip-modal-body"><div class="vip-search-container"><input type="search" placeholder="' + self.options.texts.searchPlaceholder + '"></div><div class="vip-icon-container"><div class="vip-no-results" style="display: none;">' + self.options.texts.noResultsText + '</div><div class="vip-icon-library">' + icons + '</div></div></div></div>';
+            if(self.options.ui.backdrop) {
                 return '<div class="vip-backdrop">' + html + '</div>';
             }
             return html;
         };
 
-        vIconPicker.init();
-
-        vIconPicker.isOpen = function() {
+        self.isOpen = function() {
             return !!document.querySelector('.vip-modal');
         };
 
-        vIconPicker.open = function() {
-            document.body.insertAdjacentHTML('beforeend', vIconPicker.renderModalHtml());
-            vIconPicker.initModalEvents();
+        self.open = function() {
+            document.body.insertAdjacentHTML('beforeend', self.renderModalHtml());
+            self.initModalEvents();
         };
 
-        vIconPicker.close = function() {
-            vIconPicker.options.on.beforeCloseModal(this);
-            if(vIconPicker.options.ui.backdrop) {
+        self.close = function() {
+            self.options.on.beforeCloseModal(this);
+            if(self.options.ui.backdrop) {
                 document.querySelector('.vip-backdrop').remove();
             } else {
                 document.querySelector('.vip-modal').remove();
             }
-            vIconPicker.options.on.afterCloseModal(this);
+            self.options.on.afterCloseModal(this);
         };
 
-        return vIconPicker;
+        self.init();
+
+        return this;
     }
 
     return VIconPicker;
@@ -220,7 +221,7 @@
     } else {
         root.Vip = factory(root);
     }
-})(typeof global !== "undefined" ? global : this.window || this.global, function (root) {
+})(typeof global !== "undefined" ? global : self.window || self.global, function (root) {
 
     'use strict';
 
@@ -304,24 +305,25 @@
     };
 
     let Vip = function(selector, options) {
+        let self = this;
 
-        this.elements = null;
+        self.elements = null;
 
-        this.library = null;
+        self.library = null;
 
-        this.iconPickers = [];
+        self.iconPickers = [];
 
-        this.isJsonFileRequired = function() {
-            for(let i = 0; i < this.elements.length; i++) {
-                if(this.elements[i].tagName.toUpperCase() === 'INPUT') {
+        self.isJsonFileRequired = function() {
+            for(let i = 0; i < self.elements.length; i++) {
+                if(self.elements[i].tagName.toUpperCase() === 'INPUT') {
                     return true;
                 }
             }
             return false;
         };
 
-        this.filterMismatchingElements = function() {
-            this.elements = Array.from(this.elements).filter(function(element) {
+        self.filterMismatchingElements = function() {
+            self.elements = Array.from(self.elements).filter(function(element) {
                 if(!['INPUT', 'SELECT'].includes(element.tagName.toUpperCase())) {
                     vipConsoleWarn('One element cannot be rendered. Use only <input> and <select> tags to initiate Vanilla Icon Picker.');
                     return false;
@@ -333,7 +335,7 @@
             });
         };
 
-        this.getIconsFromSelect = function(element) {
+        self.getIconsFromSelect = function(element) {
             let options = element.querySelectorAll('option');
             let library = {};
             for(let i = 0; i < options.length; i++) {
@@ -342,19 +344,19 @@
             return library;
         };
 
-        this.makeIconPickers = function(options) {
-            for(let i = 0; i < this.elements.length; i++) {
-                let library = this.library;
-                if(this.elements[i].tagName.toUpperCase() === 'SELECT') {
-                    library = this.getIconsFromSelect(this.elements[i]);
+        self.makeIconPickers = function(options) {
+            for(let i = 0; i < self.elements.length; i++) {
+                let library = self.library;
+                if(self.elements[i].tagName.toUpperCase() === 'SELECT') {
+                    library = self.getIconsFromSelect(self.elements[i]);
                 }
 
-                this.iconPickers.push(new VIconPicker(this, this.elements[i], options, library));
+                self.iconPickers.push(new VIconPicker(this, self.elements[i], options, library));
             }
             options.on.ready(this);
         };
 
-        this.init = function(selector, options) {
+        self.init = function(selector, options) {
 
             if(!supports) {
                 vipConsoleError('Vanilla Icon Picker (VIP) not supported. You should never surf the internet with a potato.');
@@ -363,15 +365,14 @@
 
             let extendedOptions = extend(defaults, options || {});
 
-            this.elements = document.querySelectorAll(selector);
-            this.filterMismatchingElements();
+            self.elements = document.querySelectorAll(selector);
+            self.filterMismatchingElements();
 
-            if(this.elements.length < 1) {
+            if(self.elements.length < 1) {
                 return;
             }
 
-            let self = this;
-            if(this.isJsonFileRequired()) {
+            if(self.isJsonFileRequired()) {
                 let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open('GET', extendedOptions.url, true);
                 xmlHttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -391,14 +392,12 @@
             }
         };
 
-        this.init(selector, options);
+        self.init(selector, options);
 
         Vip.prototype.all = function() {
-            return this.iconPickers;
+            return self.iconPickers;
         };
     };
-
-
 
     return Vip;
 
