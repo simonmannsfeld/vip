@@ -304,97 +304,101 @@
     };
 
     let Vip = function(selector, options) {
-        Vip.init(selector, options);
-    };
 
-    Vip.elements = null;
+        this.elements = null;
 
-    Vip.library = null;
+        this.library = null;
 
-    Vip.iconPickers = [];
+        this.iconPickers = [];
 
-    Vip.isJsonFileRequired = function() {
-        for(let i = 0; i < Vip.elements.length; i++) {
-            if(Vip.elements[i].tagName.toUpperCase() === 'INPUT') {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    Vip.filterMismatchingElements = function() {
-        Vip.elements = Array.from(Vip.elements).filter(function(element) {
-            if(!['INPUT', 'SELECT'].includes(element.tagName.toUpperCase())) {
-                vipConsoleWarn('One element cannot be rendered. Use only <input> and <select> tags to initiate Vanilla Icon Picker.');
-                return false;
-            }
-            if(element.tagName.toUpperCase() === 'INPUT' && element.type !== 'text') {
-                vipConsoleWarn('Vanilla Icon Picker (VIP) expected that <input> element to initiate have the property type="text". type="' + element.type + '" was given.');
-            }
-            return true;
-        });
-    };
-
-    Vip.getIconsFromSelect = function(element) {
-        let options = element.querySelectorAll('option');
-        let library = {};
-        for(let i = 0; i < options.length; i++) {
-            library[options[i].value] = options[i].innerHTML;
-        }
-        return library;
-    };
-
-    Vip.makeIconPickers = function(options) {
-        for(let i = 0; i < Vip.elements.length; i++) {
-            let library = Vip.library;
-            if(Vip.elements[i].tagName.toUpperCase() === 'SELECT') {
-                library = Vip.getIconsFromSelect(Vip.elements[i]);
-            }
-
-            Vip.iconPickers.push(new VIconPicker(this, Vip.elements[i], options, library));
-        }
-        options.on.ready(this);
-    };
-
-    Vip.init = function(selector, options) {
-
-        if(!supports) {
-            vipConsoleError('Vanilla Icon Picker (VIP) not supported. You should never surf the internet with a potato.');
-            return;
-        }
-
-        let extendedOptions = extend(defaults, options || {});
-
-        Vip.elements = document.querySelectorAll(selector);
-        Vip.filterMismatchingElements();
-
-        if(Vip.elements.length < 1) {
-            return;
-        }
-
-        if(Vip.isJsonFileRequired()) {
-            let xmlHttp = new XMLHttpRequest();
-            xmlHttp.open('GET', extendedOptions.url, true);
-            xmlHttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-            xmlHttp.send();
-            xmlHttp.onreadystatechange = function () {
-                if(this.readyState === 4) {
-                    if(this.status === 200) {
-                        Vip.library = JSON.parse(this.responseText);
-                        Vip.makeIconPickers(extendedOptions);
-                    } else {
-                        vipConsoleError('Vanilla Icon Picker (VIP) cannot get JSON file. Did you pass the parameter "url"?');
-                    }
+        this.isJsonFileRequired = function() {
+            for(let i = 0; i < this.elements.length; i++) {
+                if(this.elements[i].tagName.toUpperCase() === 'INPUT') {
+                    return true;
                 }
-            };
-        } else {
-            Vip.makeIconPickers(extendedOptions);
-        }
+            }
+            return false;
+        };
+
+        this.filterMismatchingElements = function() {
+            this.elements = Array.from(this.elements).filter(function(element) {
+                if(!['INPUT', 'SELECT'].includes(element.tagName.toUpperCase())) {
+                    vipConsoleWarn('One element cannot be rendered. Use only <input> and <select> tags to initiate Vanilla Icon Picker.');
+                    return false;
+                }
+                if(element.tagName.toUpperCase() === 'INPUT' && element.type !== 'text') {
+                    vipConsoleWarn('Vanilla Icon Picker (VIP) expected that <input> element to initiate have the property type="text". type="' + element.type + '" was given.');
+                }
+                return true;
+            });
+        };
+
+        this.getIconsFromSelect = function(element) {
+            let options = element.querySelectorAll('option');
+            let library = {};
+            for(let i = 0; i < options.length; i++) {
+                library[options[i].value] = options[i].innerHTML;
+            }
+            return library;
+        };
+
+        this.makeIconPickers = function(options) {
+            for(let i = 0; i < this.elements.length; i++) {
+                let library = this.library;
+                if(this.elements[i].tagName.toUpperCase() === 'SELECT') {
+                    library = this.getIconsFromSelect(this.elements[i]);
+                }
+
+                this.iconPickers.push(new VIconPicker(this, this.elements[i], options, library));
+            }
+            options.on.ready(this);
+        };
+
+        this.init = function(selector, options) {
+
+            if(!supports) {
+                vipConsoleError('Vanilla Icon Picker (VIP) not supported. You should never surf the internet with a potato.');
+                return;
+            }
+
+            let extendedOptions = extend(defaults, options || {});
+
+            this.elements = document.querySelectorAll(selector);
+            this.filterMismatchingElements();
+
+            if(this.elements.length < 1) {
+                return;
+            }
+
+            let self = this;
+            if(this.isJsonFileRequired()) {
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', extendedOptions.url, true);
+                xmlHttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xmlHttp.send();
+                xmlHttp.onreadystatechange = function () {
+                    if(this.readyState === 4) {
+                        if(this.status === 200) {
+                            self.library = JSON.parse(this.responseText);
+                            self.makeIconPickers(extendedOptions);
+                        } else {
+                            vipConsoleError('Vanilla Icon Picker (VIP) cannot get JSON file. Did you pass the parameter "url"?');
+                        }
+                    }
+                };
+            } else {
+                self.makeIconPickers(extendedOptions);
+            }
+        };
+
+        this.init(selector, options);
+
+        Vip.prototype.all = function() {
+            return this.iconPickers;
+        };
     };
 
-    Vip.prototype.all = function() {
-        return Vip.iconPickers;
-    };
+
 
     return Vip;
 
