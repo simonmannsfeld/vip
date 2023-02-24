@@ -1,4 +1,4 @@
-[class^="vip-"] {
+[class^="vip-"], [class^="vip-"]::before, [class^="vip-"]::after {
     box-sizing: border-box;
 }
 .vip-backdrop {
@@ -88,8 +88,8 @@
     content: '';
     border-radius: 50%;
     border: 3px solid #ccc;
-    width: 8px;
-    height: 8px;
+    width: 14px;
+    height: 14px;
     left: 27px;
     position: absolute;
     top: 25px;
